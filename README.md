@@ -47,7 +47,7 @@ src/
 ## Como Executar
 
 1. Clone o repositório
-2. Execute `./mvnw spring-boot:run` (Linux/Mac) ou `mvnw.cmd spring-boot:run` (Windows)
+2. Execute `./mvnw spring-boot:run` (Linux/Mac) ou `mvn spring-boot:run` (Windows)
 3. Acesse `http://localhost:8080/parser/` no navegador
 
 ## Gramática Utilizada
