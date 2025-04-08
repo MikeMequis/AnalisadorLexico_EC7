@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Resultado da Análise</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        main {
+            flex: 1 0 auto;
+            padding: 20px 0;
+        }
+
+        .syntax-tree {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .result-header {
+            margin-bottom: 30px;
+        }
+
+        .icon-large {
+            font-size: 3rem;
+            vertical-align: middle;
+        }
+        
+        .set-item {
+            margin-bottom: 5px;
+            font-family: monospace;
+        }
+        
+        .collapsible-header {
+            font-weight: bold;
+        }
+        
+        .margin-left {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="blue lighten-1">
+            <div class="nav-wrapper container">
+                <a href="/parser/" class="brand-logo">Analisador Sintático</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m10 offset-m1">
+                    <div class="card hoverable">
+                        <div class="card-content">
+                            <div class="result-header">
+                                <h4 class="blue-text text-darken-2">
+                                    <i class="material-icons icon-large">assignment</i>
+                                    Resultado da Análise
+                                </h4>
+                                <p class="grey-text">Expressão analisada: <span th:text="${expression}" class="blue-text text-darken-2"></span></p>
+                            </div>
+
+                            <div th:if="${isValid}" class="section">
+                                <div class="green-text valign-wrapper">
+                                    <i class="material-icons icon-large">check_circle</i>
+                                    <h5 class="margin-left">Expressão Válida!</h5>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="section">
+                                    <h6>Árvore Sintática Gerada:</h6>
+                                    <div class="syntax-tree z-depth-1">
+                                        <pre th:text="${ast}"></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div th:unless="${isValid}" class="section">
+                                <div class="red-text valign-wrapper">
+                                    <i class="material-icons icon-large">error</i>
+                                    <h5 class="margin-left">Erro na Análise</h5>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="section">
+                                    <div class="card-panel red lighten-4">
+                                        <span class="red-text text-darken-4" th:text="${error}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <div class="divider"></div>
+                                <h6 class="blue-text text-darken-2">Informações da Gramática</h6>
+                                
+                                <ul class="collapsible">
+                                    <li>
+                                        <div class="collapsible-header">
+                                            <i class="material-icons">format_list_bulleted</i>
+                                            Conjuntos FIRST
+                                        </div>
+                                        <div class="collapsible-body">
+                                            <div th:each="entry : ${firstSets}" class="set-item">
+                                                <strong th:text="${entry.key}"></strong> = <span th:text="${entry.value}"></span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-header">
+                                            <i class="material-icons">arrow_forward</i>
+                                            Conjuntos FOLLOW
+                                        </div>
+                                        <div class="collapsible-body">
+                                            <div th:each="entry : ${followSets}" class="set-item">
+                                                <strong th:text="${entry.key}"></strong> = <span th:text="${entry.value}"></span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="center-align section">
+                                <a href="/parser/" class="btn waves-effect waves-light blue">
+                                    <i class="material-icons left">refresh</i>
+                                    Nova Análise
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="page-footer blue lighten-1">
+        <div class="container">
+            <div class="row">
+                <div class="col s12">
+                    <h5 class="white-text">Sistema de Análise Sintática</h5>
+                    <p class="grey-text text-lighten-4">Analisador recursivo descendente para expressões com atribuição e operadores aritméticos</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            M.AutoInit();
+            var elems = document.querySelectorAll('.collapsible');
+            var instances = M.Collapsible.init(elems);
+        });
+    </script>
+</body>
+</html>
