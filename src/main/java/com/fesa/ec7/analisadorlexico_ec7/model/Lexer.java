@@ -7,45 +7,36 @@ import java.util.regex.Pattern;
 
 public class Lexer {
     private int currentPos = 0;
-    private List<Token> tokens;
-    
+    private final List<Token> tokens;
+
     public Lexer(String input) {
-        tokens = tokenize(input);
+        this.tokens = tokenize(input);
     }
-    
+
     private List<Token> tokenize(String input) {
-        List<Token> tokenList = new ArrayList<>();
-        
-        Pattern tokenPattern = Pattern.compile("\\(|\\)|\\+|\\-|\\*|\\/|\\=|[a-zA-Z][a-zA-Z0-9]*|\\s+");
-        Matcher matcher = tokenPattern.matcher(input);
-        
+        List<Token> tokens = new ArrayList<>();
+        Pattern pattern = Pattern.compile("([()+\\-*/=])|([a-zA-Z]\\w*)|\\s+");
+        Matcher matcher = pattern.matcher(input);
+
         while (matcher.find()) {
-            String match = matcher.group().trim();
-            if (!match.isEmpty()) {
-                String type;
-                switch (match) {
-                    case "(": type = "("; break;
-                    case ")": type = ")"; break;
-                    case "+": type = "+"; break;
-                    case "-": type = "-"; break;
-                    case "*": type = "*"; break;
-                    case "/": type = "/"; break;
-                    case "=": type = "="; break;
-                    default: type = "id"; break;
-                }
-                tokenList.add(new Token(type, match));
-            }
+            String match = matcher.group();
+            if (match.matches("\\s+")) continue;
+
+            String type = switch (match) {
+                case "(", ")", "+", "-", "*", "/", "=" -> match;
+                default -> "id";
+            };
+            tokens.add(new Token(type, match));
         }
-        
-        tokenList.add(new Token("$", "$"));
-        return tokenList;
+        tokens.add(new Token("$", "$"));
+        return tokens;
     }
     
     public Token nextToken() {
         if (currentPos < tokens.size()) {
             return tokens.get(currentPos++);
         }
-        return tokens.get(tokens.size() - 1);
+        return tokens.get(tokens.size() - 1); // Retorna o token de fim ($)
     }
     
     public Token peekToken() {
