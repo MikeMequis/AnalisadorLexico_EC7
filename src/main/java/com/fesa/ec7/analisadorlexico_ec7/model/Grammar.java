@@ -38,31 +38,19 @@ public class Grammar {
     
     public static Grammar createAssignmentGrammar() {
         Grammar grammar = new Grammar();
+        grammar.setStartSymbol("S");
         
-        // S -> id = E
         grammar.addProduction("S", List.of("id", "=", "E"));
-        
-        // E -> T E'
         grammar.addProduction("E", List.of("T", "E'"));
-        
-        // E' -> + T E' | - T E' | ε
         grammar.addProduction("E'", List.of("+", "T", "E'"));
         grammar.addProduction("E'", List.of("-", "T", "E'"));
-        grammar.addProduction("E'", List.of()); // ε
-        
-        // T -> F T'
+        grammar.addProduction("E'", List.of());
         grammar.addProduction("T", List.of("F", "T'"));
-        
-        // T' -> * F T' | / F T' | ε
         grammar.addProduction("T'", List.of("*", "F", "T'"));
         grammar.addProduction("T'", List.of("/", "F", "T'"));
-        grammar.addProduction("T'", List.of()); // ε
-        
-        // F -> ( E ) | id
+        grammar.addProduction("T'", List.of());
         grammar.addProduction("F", List.of("(", "E", ")"));
         grammar.addProduction("F", List.of("id"));
-        
-        grammar.setStartSymbol("S");
         
         return grammar;
     }

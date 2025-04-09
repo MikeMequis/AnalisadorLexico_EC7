@@ -1,14 +1,14 @@
 package com.fesa.ec7.analisadorlexico_ec7.model;
 
 public class Token {
-    private String type;
-    private String value;
+    private final String type;
+    private final String value;
 
     public Token(String type, String value) {
         this.type = type;
         this.value = value;
     }
-
+    
     public String getType() {
         return type;
     }
