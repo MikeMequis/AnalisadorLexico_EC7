@@ -16,7 +16,6 @@ public class Lexer {
     private List<Token> tokenize(String input) {
         List<Token> tokenList = new ArrayList<>();
         
-        // Definição de padrões para tokens
         Pattern tokenPattern = Pattern.compile("\\(|\\)|\\+|\\-|\\*|\\/|\\=|[a-zA-Z][a-zA-Z0-9]*|\\s+");
         Matcher matcher = tokenPattern.matcher(input);
         
@@ -38,7 +37,6 @@ public class Lexer {
             }
         }
         
-        // Adiciona token de fim de entrada
         tokenList.add(new Token("$", "$"));
         return tokenList;
     }
@@ -47,7 +45,7 @@ public class Lexer {
         if (currentPos < tokens.size()) {
             return tokens.get(currentPos++);
         }
-        return tokens.get(tokens.size() - 1); // Retorna o token de fim ($)
+        return tokens.get(tokens.size() - 1);
     }
     
     public Token peekToken() {

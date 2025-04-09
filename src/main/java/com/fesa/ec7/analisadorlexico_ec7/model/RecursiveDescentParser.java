@@ -7,7 +7,6 @@ public class RecursiveDescentParser {
     private Lexer lexer;
     private Token currentToken;
     private FirstFollowCalculator ffCalculator;
-    private Map<String, Set<String>> firstSets;
     private Map<String, Set<String>> followSets;
 
     public RecursiveDescentParser(Lexer lexer, Grammar grammar) {
@@ -15,7 +14,7 @@ public class RecursiveDescentParser {
         this.currentToken = lexer.nextToken();
         
         this.ffCalculator = new FirstFollowCalculator(grammar);
-        this.firstSets = ffCalculator.getFirstSets();
+        ffCalculator.getFirstSets();
         this.followSets = ffCalculator.getFollowSets();
     }
 
@@ -76,7 +75,6 @@ public class RecursiveDescentParser {
             node.addChild(T());
             node.addChild(EPrime());
         } else if (followSets.get("E'").contains(currentToken.getType())) {
-            // ε produção - não faz nada
             node.addChild(new ASTNode("ε"));
         } else {
             throw new RuntimeException("Erro sintático em E': esperado '+', '-', ou um dos tokens " + 
@@ -105,7 +103,6 @@ public class RecursiveDescentParser {
             node.addChild(F());
             node.addChild(TPrime());
         } else if (followSets.get("T'").contains(currentToken.getType())) {
-            // ε produção - não faz nada
             node.addChild(new ASTNode("ε"));
         } else {
             throw new RuntimeException("Erro sintático em T': esperado '*', '/', ou um dos tokens " + 

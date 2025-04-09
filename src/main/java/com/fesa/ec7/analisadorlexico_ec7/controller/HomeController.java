@@ -28,7 +28,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        // Adiciona os conjuntos First e Follow já na página inicial
         FirstFollowCalculator calculator = new FirstFollowCalculator(grammar);
         model.addAttribute("firstSets", calculator.getFirstSets());
         model.addAttribute("followSets", calculator.getFollowSets());
@@ -42,7 +41,6 @@ public class HomeController {
             RecursiveDescentParser parser = new RecursiveDescentParser(lexer, grammar);
             ASTNode ast = parser.parse();
             
-            // Obtém os conjuntos First e Follow
             FirstFollowCalculator calculator = new FirstFollowCalculator(grammar);
             Map<String, Set<String>> firstSets = calculator.getFirstSets();
             Map<String, Set<String>> followSets = calculator.getFollowSets();
@@ -56,11 +54,6 @@ public class HomeController {
             model.addAttribute("expression", expression);
             model.addAttribute("error", e.getMessage());
             model.addAttribute("isValid", false);
-            
-            // Mesmo em caso de erro, exibe os conjuntos First e Follow
-            FirstFollowCalculator calculator = new FirstFollowCalculator(grammar);
-            model.addAttribute("firstSets", calculator.getFirstSets());
-            model.addAttribute("followSets", calculator.getFollowSets());
         }
         return "result";
     }
